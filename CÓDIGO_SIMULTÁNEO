@@ -1,0 +1,77 @@
+#include <Arduino.h> 
+// Define los pines para las botoneras y las tiras LED 
+const int botonBlancoPin = 2; 
+const int botonAmarilloPin = 3; 
+const int botonAzulPin = 4; 
+const int botonRojoPin = 5; 
+const int botonVerdePin = 6; 
+const int tiraLedPin1 = 7; // Tira LED 1 
+const int tiraLedPin2R = 8; // Tira LED 2, pin rojo 
+const int tiraLedPin2G = 9; // Tira LED 2, pin verde 
+const int tiraLedPin2B = 10; // Tira LED 2, pin azul 
+void setup() {
+  // Configura los pines de entrada para las botoneras
+  pinMode(botonBlancoPin, INPUT_PULLUP); 
+  pinMode(botonAmarilloPin, INPUT_PULLUP); 
+  pinMode(botonAzulPin, INPUT_PULLUP); 
+  pinMode(botonRojoPin, INPUT_PULLUP); 
+  pinMode(botonVerdePin, INPUT_PULLUP);
+  // Configura los pines de las tiras LED como salidas 
+  pinMode(tiraLedPin1, OUTPUT); 
+  pinMode(tiraLedPin2R, OUTPUT); 
+  pinMode(tiraLedPin2G, OUTPUT); 
+  pinMode(tiraLedPin2B, OUTPUT);
+}
+void loop() {
+  // Lee el estado de las botoneras
+  bool blancoPresionado = digitalRead(botonBlancoPin) == LOW;
+  bool amarilloPresionado = digitalRead(botonAmarilloPin) == LOW; 
+  bool azulPresionado = digitalRead(botonAzulPin) == LOW; 
+  bool rojoPresionado = digitalRead(botonRojoPin) == LOW; 
+  bool verdePresionado = digitalRead(botonVerdePin) == LOW;
+  // Control de la tira LED 1
+  if (blancoPresionado) {
+    cambiarColor(tiraLedPin1, 255, 255, 255); // Blanco
+  } else if (amarilloPresionado) {
+    cambiarColor(tiraLedPin1, 255, 255, 0); // Amarillo
+  } else if (azulPresionado) {
+    cambiarColor(tiraLedPin1, 0, 0, 255); // Azul
+  } else if (rojoPresionado) {
+    cambiarColor(tiraLedPin1, 255, 0, 0); // Rojo
+  } else if (verdePresionado) {
+    cambiarColor(tiraLedPin1, 0, 255, 0); // Verde
+  } else {
+    // Si ninguna botonera está presionada, apaga la tira LED 1
+    cambiarColor(tiraLedPin1, 0, 0, 0); // Apagar
+  }
+  // Control de la tira LED 2
+  if ((blancoPresionado && amarilloPresionado) || (amarilloPresionado && blancoPresionado)){
+    cambiarColor(tiraLedPin2R, 255, 255, 0); // Amarillo
+  } else if ((blancoPresionado && azulPresionado) || (azulPresionado && blancoPresionado)) {
+    cambiarColor(tiraLedPin2R, 0, 0, 255); // Azul
+  } else if ((blancoPresionado && rojoPresionado) || (rojoPresionado && blancoPresionado)) {
+    cambiarColor(tiraLedPin2R, 255, 0, 0); // Rojo 
+  } else if ((blancoPresionado && verdePresionado) || (verdePresionado && blancoPresionado)) { 
+  cambiarColor(tiraLedPin2R, 0, 255, 0); // Verde 
+  } else if ((amarilloPresionado && azulPresionado) || (azulPresionado && amarilloPresionado)) {
+  cambiarColor(tiraLedPin2R, 0, 255, 255); // Cyan 
+  } else if ((amarilloPresionado && rojoPresionado) || (rojoPresionado && amarilloPresionado)) { 
+  cambiarColor(tiraLedPin2R, 255, 128, 0); // Naranja 
+  } else if ((amarilloPresionado && verdePresionado) || (verdePresionado && amarilloPresionado)) { 
+  cambiarColor(tiraLedPin2R, 128, 255, 0); // Amarillo verdoso 
+  } else if ((azulPresionado && rojoPresionado) || (rojoPresionado && azulPresionado)) { 
+  cambiarColor(tiraLedPin2R, 255, 0, 128); // Morado 
+  } else if ((azulPresionado && verdePresionado) || (verdePresionado && azulPresionado)) { 
+  cambiarColor(tiraLedPin2R, 0, 255, 128); // Azul verdoso 
+  } else if ((rojoPresionado && verdePresionado) || (verdePresionado && rojoPresionado)) { 
+  cambiarColor(tiraLedPin2R, 128, 255, 0); // Amarillo verdoso 
+  } else { 
+  // Si ninguna combinación de botoneras está presionada, apaga la tira LED 2 
+  cambiarColor(tiraLedPin2R, 0, 0, 0); // Apagar 
+  } 
+} 
+void cambiarColor(int pin, int rojo, int verde, int azul) { 
+  analogWrite(pin, rojo); 
+  analogWrite(pin + 1, verde); 
+  analogWrite(pin + 2, azul); 
+}
