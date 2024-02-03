@@ -1,0 +1,46 @@
+#include <Arduino.h> 
+// Define los pines para las botoneras y la tira LED 
+const int botonBlancoPin = 2; 
+const int botonAmarilloPin = 3; 
+const int botonAzulPin = 4; 
+const int botonRojoPin = 5; 
+const int botonVerdePin = 6; 
+const int tiraLedPin1 = 7; 
+void setup() {
+  // Configura los pines de entrada para las botoneras
+  pinMode(botonBlancoPin, INPUT_PULLUP); 
+  pinMode(botonAmarilloPin, INPUT_PULLUP); 
+  pinMode(botonAzulPin, INPUT_PULLUP); 
+  pinMode(botonRojoPin, INPUT_PULLUP); 
+  pinMode(botonVerdePin, INPUT_PULLUP);
+  // Configura el pin de la tira LED como salida
+  pinMode(tiraLedPin, OUTPUT); 
+}
+void loop() {
+  // Lee el estado de las botoneras
+  bool blancoPresionado = digitalRead(botonBlancoPin) == LOW;
+  bool amarilloPresionado = digitalRead(botonAmarilloPin) == LOW; 
+  bool azulPresionado = digitalRead(botonAzulPin) == LOW; 
+  bool rojoPresionado = digitalRead(botonRojoPin) == LOW; 
+  bool verdePresionado = digitalRead(botonVerdePin) == LOW;
+  // Cambia el color de la tira LED según la botonera presionada
+  if (blancoPresionado) {
+    cambiarColor(tiraLedPin1, 255, 255, 255); // Blanco
+  } else if (amarilloPresionado) {
+    cambiarColor(tiraLedPin1, 255, 255, 0); // Amarillo
+  } else if (azulPresionado) {
+    cambiarColor(tiraLedPin1, 0, 0, 255); // Azul
+  } else if (rojoPresionado) {
+    cambiarColor(tiraLedPin1, 255, 0, 0); // Rojo
+  } else if (verdePresionado) {
+    cambiarColor(tiraLedPin1, 0, 255, 0); // Verde
+  } else {
+    // Si ninguna botonera está presionada, apaga la tira LED 
+    cambiarColor(0, 0, 0); // Apagar
+  }
+}
+void cambiarColor(int rojo, int verde, int azul) { 
+  analogWrite(tiraLedPin, rojo); 
+  analogWrite(tiraLedPin + 1, verde); 
+  analogWrite(tiraLedPin + 2, azul); 
+}
